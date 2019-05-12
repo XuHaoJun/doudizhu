@@ -1,12 +1,13 @@
+import os
 from .base import *
 
 SECRET_KEY = 'fiDSpuZ7QFe8fm0XP9Jb7ZIPNsOegkHYtgKSd4I83Hs='
 
 DATABASE = {
-    'host': 'localhost',
-    'database': 'ddz',
+    'host': 'db',
+    'database': os.environ.get('MYSQL_DATABASE', 'ddz'),
     'user': 'root',
-    'password': '123456',
+    'password': os.environ.get('MYSQL_ROOT_PASSWORD', '123456'),
 }
 
 LOGGING = {

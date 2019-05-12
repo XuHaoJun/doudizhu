@@ -1,2 +1,2 @@
 FROM nginx:latest
-ADD nginx.conf /etc/nginx/conf.d/doudizhu
+ADD nginx.conf /etc/nginx/nginx.conf

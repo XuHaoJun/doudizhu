@@ -1,17 +1,43 @@
 version: "3"
 
 services:
-  nginx:
-    build: ./compose/nginx
+  db: 
+    container_name: db
+    build: 
+      context: .
+      dockerfile: compose/db/Dockerfile
+    env_file:
+      - compose/db/db.env
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
 
-  doudizhu:
+  db-manager:
+    image: adminer:4.7
+    container_name: db-manager
+    restart: always
+    ports:
+      - 8081:8080
+
+  webserver:
+    container_name: webserver
+    image: nginx:latest
+  
+  webapp:
     image: mailyc/doudizhu:latest
-    build: ./compose/app/
-    command: python3 app.py --host=172.20.0.1
+    container_name: webapp
+    build: 
+      context: .
+      dockerfile: compose/app/Dockerfile
+    command: ["python3", "app.py"]
+    env_file:
+      - compose/db/db.env
     networks:
       - default
     ports:
-      - "8080:8080"
+      - 8080:8080
     volumes:
       - /var/log:/var/log
       - ./doudizhu:/app
@@ -21,3 +47,5 @@ networks:
   default:
     driver: bridge
 
+volumes: 
+  data:
